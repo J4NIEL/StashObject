@@ -1,4 +1,24 @@
+Features
+Personal Stash Access:
+Players can open their private stash using a nearby pillow object (v_med_pillow).
 
+Police Stash Search:
+Police officers can search other players' stashes with a 50% success chance. If successful, they can view the target player's stash.
+
+Cooldown Mechanism:
+Each stash search has a cooldown period of 20 minutes per player to prevent abuse.
+
+Interactive Input:
+Police must enter the player's ID using an input dialog to initiate a stash search.
+
+Installation
+Requirements:
+
+A functional FiveM server with the QBCore framework installed.
+qb-target for targeting interactions.
+qb-input for input dialogs.
+oxmysql for SQL integration.
+An inventory script compatible with QBCore (e.g., qb-inventory).
 
 ## Dependencies
 
@@ -7,14 +27,29 @@
 
 
 
-## Add this to your [qb-core/shared/items.lua]
+## Change Stash Item [j4-stash/client.lua]
 ```
-    temizcamasir                  = { name = 'temizcamasir', label = 'Islak Çamaşır', weight = 1000, type = 'item', image = 'temizcamasir.png', unique = false, useable = false, shouldClose = true, description = 'Islak Çamaşır' },
-    tabldot                       = { name = 'tabldot', label = 'Tabldot', weight = 1000, type = 'item', image = 'tabldot.png', unique = false, useable = false, shouldClose = true, description = 'Afiyet Olsun' },
-    kirlicamasir                  = { name = 'kirlicamasir', label = 'Kirli Çamaşır', weight = 30000, type = 'item', image = 'kirlicamasir.png', unique = true, useable = true, shouldClose = true, description = 'Kirli Çamaşır' },
-    hazircamasir                  = { name = 'hazircamasir', label = 'Hazır Çamaşır', weight = 3000, type = 'item', image = 'hazircamasir.png', unique = true, useable = true, shouldClose = true, description = 'Hazır Çamaşır' },
-    kuru_camasir                  = { name = 'kuru_camasir', label = 'Kuru Çamaşır', weight = 3000, type = 'item', image = 'kuru_camasir.png', unique = true, useable = true, shouldClose = true, description = 'Kuru Çamaşır' },
-    bitti_camasir                 = { name = 'bitti_camasir', label = 'bitti_camasir', weight = 3000, type = 'item', image = 'bitti_camasir.png', unique = true, useable = true, shouldClose = true, description = 'Çamaşır' },
-    
+Citizen.CreateThread(function()
+    exports['qb-target']:AddTargetModel('v_med_pillow', {
+        options = {
+            {
+                type = "client",
+                event = "depo", 
+                icon = "fas fa-box-open",
+                label = "Depoyu aç", 
+            },
+            {
+                type = "server",
+                event = "j4-stash:server:SearchStash", 
+                icon = "fas fa-search",
+                label = "Başka birinin deposunu ara", 
+                job = "police" 
+            },
+        },
+        distance = 2.5 
+    })
+end)
 ```
+
+exports['qb-target']:AddTargetModel('v_med_pillow', change your TargetModel
  
